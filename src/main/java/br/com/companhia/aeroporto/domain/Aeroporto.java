@@ -5,8 +5,6 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "", schema = "")
@@ -24,12 +22,9 @@ public class Aeroporto implements Serializable {
     private String nome;
 
     @Column(name = "")
-    private Long codigoAeroportuario;
+    private String codigoAeroportuario;
 
-    @ManyToOne
-    @JoinColumn(name = "cidade_id")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "")
     private Cidade cidade;
-
-    @OneToMany(mappedBy = "aeroporto_origem")
-    private List<Voo> voos = new ArrayList<>();
 }

@@ -24,5 +24,4 @@ public class Bagagem implements Serializable {
     @Column(name = "")
     private Boolean isDespachada;
 
-
 }

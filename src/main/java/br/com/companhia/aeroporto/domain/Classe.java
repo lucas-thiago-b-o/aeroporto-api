@@ -5,8 +5,6 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "", schema = "")
@@ -23,6 +21,7 @@ public class Classe implements Serializable {
     @Column(name = "")
     private String nome;
 
-    @OneToMany(mappedBy = "passageiro")
-    private List<Assento> assentos = new ArrayList<>();
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "")
+    private Assento assento;
 }

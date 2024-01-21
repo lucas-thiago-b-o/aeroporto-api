@@ -6,8 +6,6 @@ import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "", schema = "")
@@ -22,9 +20,6 @@ public class Passagem implements Serializable {
     private Long id;
 
     @Column(name = "")
-    private String nomeVoo;
-
-    @Column(name = "")
     private String portaoEmbarque;
 
     @Column(name = "")
@@ -36,18 +31,21 @@ public class Passagem implements Serializable {
     @Column(name = "")
     private Long numeroIdentificacao;
 
-    @ManyToOne
-    @JoinColumn(name = "assento")
-    private Assento assento;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "")
+    private Voo voo;
 
-    @ManyToOne
-    @JoinColumn(name = "passagem")
-    private Aeroporto aeroportoDestino;
-
-    @ManyToOne
-    @JoinColumn(name = "passagem")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "")
     private Passageiro passageiro;
 
-    @OneToMany(mappedBy = "bagagem")
-    private List<Bagagem> bagagens = new ArrayList<>();
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "")
+    private Classe classe;
+
+        /*
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "")
+    private Bagagem bagagem;*/
 }

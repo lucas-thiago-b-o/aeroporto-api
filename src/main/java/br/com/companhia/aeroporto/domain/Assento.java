@@ -20,12 +20,4 @@ public class Assento implements Serializable {
 
     @Column(name = "")
     private String nome;
-
-    @ManyToOne
-    @JoinColumn(name = "passagem")
-    private Classe classe;
-
-    @ManyToOne
-    @JoinColumn(name = "passagem")
-    private Passageiro passageiro;
 }

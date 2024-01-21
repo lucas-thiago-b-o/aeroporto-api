@@ -38,4 +38,8 @@ public class Passageiro implements Serializable {
 
     @Column(name = "")
     private Long contatoEmergencia;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "")
+    private Bagagem bagagem;
 }
