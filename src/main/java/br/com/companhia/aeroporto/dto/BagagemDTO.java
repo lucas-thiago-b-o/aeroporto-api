@@ -1,15 +1,11 @@
 package br.com.companhia.aeroporto.dto;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.io.Serial;
-import java.io.Serializable;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-public class BagagemDTO implements Serializable {
+@NoArgsConstructor
+public class BagagemDTO {
 
     private Long id;
     private Long numeroIdentificacao;

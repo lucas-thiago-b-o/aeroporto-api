@@ -1,12 +1,13 @@
 package br.com.companhia.aeroporto.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class PassagemDTO implements Serializable {
+@NoArgsConstructor
+public class PassagemDTO {
 
     private Long id;
     private String portaoEmbarque;

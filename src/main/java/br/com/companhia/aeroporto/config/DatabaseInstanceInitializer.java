@@ -39,11 +39,17 @@ public class DatabaseInstanceInitializer {
 
     public void instanciaDadosNaBase() {
         Cidade salvador = new Cidade();
+        Cidade portoSeguro = new Cidade();
         Cidade riodejaneiro = new Cidade();
+        Cidade cruzeiroDoSul = new Cidade();
         Uf bahia = new Uf();
         Uf rj = new Uf();
+        Uf acre = new Uf();
         Aeroporto aeroportoSalvador = new Aeroporto();
-        Aeroporto aeroportoRioDeJaneiro = new Aeroporto();
+        Aeroporto aeroportoCruzeiroDoSul = new Aeroporto();
+        Aeroporto aeroportoPortoSeguro = new Aeroporto();
+        Aeroporto aeroportoRioDeJaneiroSantosDumont = new Aeroporto();
+        Aeroporto aeroportoRioDeJaneiroGaleao = new Aeroporto();
         Voo vooSalvador1 = new Voo();
         Passageiro passageiro1 = new Passageiro();
         Classe classe11 = new Classe();
@@ -57,6 +63,9 @@ public class DatabaseInstanceInitializer {
         rj.setId(2L);
         rj.setNome("Rio de Janeiro");
 
+        acre.setId(3L);
+        acre.setNome("Acre");
+
         salvador.setId(1L);
         salvador.setNome("Salvador");
         salvador.setUf(bahia);
@@ -65,15 +74,38 @@ public class DatabaseInstanceInitializer {
         riodejaneiro.setNome("Rio de Janeiro");
         riodejaneiro.setUf(rj);
 
+        portoSeguro.setId(3L);
+        portoSeguro.setNome("Porto Seguro");
+        portoSeguro.setUf(bahia);
+
+        cruzeiroDoSul.setId(4L);
+        cruzeiroDoSul.setNome("Cruzeiro do Sul");
+        cruzeiroDoSul.setUf(acre);
+
         aeroportoSalvador.setId(1L);
         aeroportoSalvador.setCidade(salvador);
         aeroportoSalvador.setNome("Aeroporto Internacional Dep. Luís Eduardo Magalhães");
         aeroportoSalvador.setCodigoAeroportuario("SSA");
 
-        aeroportoRioDeJaneiro.setId(2L);
-        aeroportoRioDeJaneiro.setCidade(riodejaneiro);
-        aeroportoRioDeJaneiro.setNome("Aeroporto do Rio de Janeiro-Santos Dumont");
-        aeroportoRioDeJaneiro.setCodigoAeroportuario("SDU");
+        aeroportoRioDeJaneiroSantosDumont.setId(2L);
+        aeroportoRioDeJaneiroSantosDumont.setCidade(riodejaneiro);
+        aeroportoRioDeJaneiroSantosDumont.setNome("Aeroporto do Rio de Janeiro-Santos Dumont");
+        aeroportoRioDeJaneiroSantosDumont.setCodigoAeroportuario("SDU");
+
+        aeroportoRioDeJaneiroGaleao.setId(3L);
+        aeroportoRioDeJaneiroGaleao.setCidade(riodejaneiro);
+        aeroportoRioDeJaneiroGaleao.setNome("Aeroporto Internacional do Rio de Janeiro-Galeão");
+        aeroportoRioDeJaneiroGaleao.setCodigoAeroportuario("GIG");
+
+        aeroportoPortoSeguro.setId(4L);
+        aeroportoPortoSeguro.setCidade(portoSeguro);
+        aeroportoPortoSeguro.setNome("Aeroporto de Porto Seguro");
+        aeroportoPortoSeguro.setCodigoAeroportuario("BPS");
+
+        aeroportoCruzeiroDoSul.setId(5L);
+        aeroportoCruzeiroDoSul.setCidade(cruzeiroDoSul);
+        aeroportoCruzeiroDoSul.setNome("Aeroporto Internacional de Cruzeiro do Sul");
+        aeroportoCruzeiroDoSul.setCodigoAeroportuario("CZS");
 
         assento11.setId(1L);
         assento11.setNome("F5");
@@ -98,7 +130,7 @@ public class DatabaseInstanceInitializer {
 
         vooSalvador1.setId(1L);
         vooSalvador1.setAeroportoOrigem(aeroportoSalvador);
-        vooSalvador1.setAeroportoDestino(aeroportoRioDeJaneiro);
+        vooSalvador1.setAeroportoDestino(aeroportoRioDeJaneiroSantosDumont);
         vooSalvador1.setDataHoraChegada(LocalDateTime.now());
         vooSalvador1.setDataHoraMarcado(LocalDateTime.now());
         vooSalvador1.setDataHoraPartida(LocalDateTime.now());
@@ -116,10 +148,16 @@ public class DatabaseInstanceInitializer {
 
         ufRepository.save(bahia);
         ufRepository.save(rj);
+        ufRepository.save(acre);
+        cidadeRepository.save(cruzeiroDoSul);
         cidadeRepository.save(salvador);
         cidadeRepository.save(riodejaneiro);
+        cidadeRepository.save(portoSeguro);
         aeroportoRepository.save(aeroportoSalvador);
-        aeroportoRepository.save(aeroportoRioDeJaneiro);
+        aeroportoRepository.save(aeroportoPortoSeguro);
+        aeroportoRepository.save(aeroportoCruzeiroDoSul);
+        aeroportoRepository.save(aeroportoRioDeJaneiroSantosDumont);
+        aeroportoRepository.save(aeroportoRioDeJaneiroGaleao);
         assentoRepository.save(assento11);
         classeRepository.save(classe11);
         bagagemRepository.save(bagagem1);

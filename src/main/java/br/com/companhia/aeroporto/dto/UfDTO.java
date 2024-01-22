@@ -1,11 +1,11 @@
 package br.com.companhia.aeroporto.dto;
 
 import lombok.Data;
-
-import java.io.Serializable;
+import lombok.NoArgsConstructor;
 
 @Data
-public class UfDTO implements Serializable {
+@NoArgsConstructor
+public class UfDTO {
 
     private Long id;
     private String nome;

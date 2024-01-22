@@ -1,15 +1,14 @@
 package br.com.companhia.aeroporto.dto;
 
 import br.com.companhia.aeroporto.domain.Assento;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-public class ClasseDTO implements Serializable {
+@NoArgsConstructor
+public class ClasseDTO {
 
     private Long id;
     private String nome;

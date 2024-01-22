@@ -16,15 +16,16 @@ public class Aeroporto implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "")
+    @Column(name = "nome")
     private String nome;
 
-    @Column(name = "")
+    @Column(name = "codigo_aeroportuario")
     private String codigoAeroportuario;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "")
+    @JoinColumn(name = "cidade_id")
     private Cidade cidade;
 }
