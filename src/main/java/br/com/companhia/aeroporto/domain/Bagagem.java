@@ -7,7 +7,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "", schema = "")
+@Table(name = "bagagem", schema = "aeroporto_database")
 @Data
 public class Bagagem implements Serializable {
 

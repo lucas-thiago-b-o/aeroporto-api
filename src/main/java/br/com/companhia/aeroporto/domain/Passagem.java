@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "", schema = "")
+@Table(name = "passagem", schema = "aeroporto_database")
 @Data
 public class Passagem implements Serializable {
 
@@ -34,18 +34,4 @@ public class Passagem implements Serializable {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "")
     private Voo voo;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "")
-    private Passageiro passageiro;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "")
-    private Classe classe;
-
-        /*
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "")
-    private Bagagem bagagem;*/
 }

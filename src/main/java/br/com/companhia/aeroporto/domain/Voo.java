@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "", schema = "")
+@Table(name = "voo", schema = "aeroporto_database")
 @Data
 public class Voo implements Serializable {
 

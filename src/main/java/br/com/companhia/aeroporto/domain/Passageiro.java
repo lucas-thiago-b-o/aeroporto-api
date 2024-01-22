@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "passageiro", schema = "aeroporto_database")
 @Data
 public class Passageiro implements Serializable {
 
