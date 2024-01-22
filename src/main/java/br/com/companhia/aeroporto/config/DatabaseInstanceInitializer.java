@@ -112,7 +112,6 @@ public class DatabaseInstanceInitializer {
         passagem.setDataHoraVoo(LocalDateTime.now());
         passagem.setNumeroIdentificacao(12345L);
         passagem.setPortaoEmbarque("Portao");
-        passagem.setClasse(classe11);
         passagem.setValor(12345L);
 
         ufRepository.save(bahia);
