@@ -16,13 +16,13 @@ public class Cidade implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "")
+    @Column(name = "nome")
     private String nome;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "")
+    @JoinColumn(name = "uf_id")
     private Uf uf;
 }
