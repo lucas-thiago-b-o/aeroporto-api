@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/passagens")
+@RequestMapping(value = "/api/passagens")
 public class PassagemResource {
 
     @Autowired

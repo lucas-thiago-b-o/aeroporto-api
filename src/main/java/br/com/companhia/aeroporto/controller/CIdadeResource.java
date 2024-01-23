@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/cidades")
+@RequestMapping(value = "/api/cidades")
 public class CIdadeResource {
 
     @Autowired

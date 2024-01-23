@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/assentos")
+@RequestMapping(value = "/api/assentos")
 public class AssentoResource {
 
 }

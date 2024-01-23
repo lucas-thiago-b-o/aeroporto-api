@@ -37,8 +37,8 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize ->
                             authorize
                                   .requestMatchers(toH2Console()).permitAll()
-                                  .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                                  .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                                  .requestMatchers(HttpMethod.POST, "*/auth/login").permitAll()
+                                  .requestMatchers(HttpMethod.POST, "*/auth/register").permitAll()
                                   .requestMatchers("*/voo/update", "*/voo/cancelar").hasRole(ADMIN)
                                    .requestMatchers("/", "/*", "/**").hasAnyRole(USER, ADMIN)
                               .anyRequest().authenticated()
