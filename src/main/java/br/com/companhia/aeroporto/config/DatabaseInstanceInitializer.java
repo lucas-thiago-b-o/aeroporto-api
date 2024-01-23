@@ -200,7 +200,7 @@ public class DatabaseInstanceInitializer {
         Bagagem bagagem1 = new Bagagem();
 
         bagagem1.setId(1L);
-        bagagem1.setNumeroIdentificacao(12345L);
+        bagagem1.setNumeroIdentificacao("UDS22223012411BGA");
         bagagem1.setIsDespachada(isDespachado);
 
         return bagagem1;
@@ -212,7 +212,7 @@ public class DatabaseInstanceInitializer {
         passagem.setId(1L);
         passagem.setVoo(getVoo());
         passagem.setDataHoraVoo(LocalDateTime.now());
-        passagem.setNumeroIdentificacao(12345L);
+        passagem.setNumeroIdentificacao("UDS22223012411");
         passagem.setPortaoEmbarque("Portao");
         passagem.setValor(geraValorVooEpassagem());
 
