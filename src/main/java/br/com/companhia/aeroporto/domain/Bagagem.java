@@ -20,7 +20,7 @@ public class Bagagem implements Serializable {
     private Long id;
 
     @Column(name = "numero_identificacao")
-    private Long numeroIdentificacao;
+    private String numeroIdentificacao;
 
     @Column(name = "is_despachada")
     private Boolean isDespachada;

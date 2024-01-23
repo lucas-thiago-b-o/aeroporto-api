@@ -29,16 +29,16 @@ public class Voo implements Serializable {
     @Column(name = "valor")
     private Long valor;
 
-    @Column(name = "datta_hora_marcado")
+    @Column(name = "data_hora_marcado")
     private LocalDateTime dataHoraMarcado;
 
-    @Column(name = "datta_hora_partida")
+    @Column(name = "data_hora_partida")
     private LocalDateTime dataHoraPartida;
 
-    @Column(name = "datta_hora_previsao")
+    @Column(name = "data_hora_previsao")
     private LocalDateTime dataHoraPrevisao;
 
-    @Column(name = "datta_hora_chegada")
+    @Column(name = "data_hora_chegada")
     private LocalDateTime dataHoraChegada;
 
     @ManyToOne(cascade = CascadeType.PERSIST)

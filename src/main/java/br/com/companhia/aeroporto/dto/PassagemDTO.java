@@ -13,6 +13,6 @@ public class PassagemDTO {
     private String portaoEmbarque;
     private LocalDateTime dataHoraVoo;
     private Long valor;
-    private Long numeroIdentificacao;
+    private String numeroIdentificacao;
     private VooDTO voo;
 }

@@ -23,6 +23,9 @@ public class Passagem implements Serializable {
     @Column(name = "portao_embarque")
     private String portaoEmbarque;
 
+    @Column(name = "status")
+    private String status;
+
     @Column(name = "data_hora_voo")
     private LocalDateTime dataHoraVoo;
 
@@ -30,7 +33,7 @@ public class Passagem implements Serializable {
     private Long valor;
 
     @Column(name = "numero_identificacao")
-    private Long numeroIdentificacao;
+    private String numeroIdentificacao;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "voo_id")

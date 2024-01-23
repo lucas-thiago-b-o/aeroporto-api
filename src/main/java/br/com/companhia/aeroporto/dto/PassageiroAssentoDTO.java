@@ -5,9 +5,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class BagagemDTO {
+public class PassageiroAssentoDTO {
 
-    private Long id;
-    private String numeroIdentificacao;
-    private Boolean isDespachada;
+    private PassageiroDTO passageiroDTO;
+    private Long classeId;
 }
