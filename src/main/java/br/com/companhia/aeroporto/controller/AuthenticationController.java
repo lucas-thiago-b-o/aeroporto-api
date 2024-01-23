@@ -32,6 +32,9 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
+        if (this.usuarioRepository.findByUsername(data.username()) == null)
+            return ResponseEntity.badRequest().body("Usuário não encontrado");
+
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
@@ -42,13 +45,13 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
-        if (this.usuarioRepository.findByUsername(data.username()) != null) return ResponseEntity.badRequest().build();
+        if (this.usuarioRepository.findByUsername(data.username()) != null) return ResponseEntity.badRequest().body("Usuário já cadastrado no sistema");
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         Usuario newUsuario = new Usuario(data.username(), encryptedPassword, data.role());
 
         this.usuarioRepository.save(newUsuario);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Cadastro efeutado com sucesso");
     }
 }
