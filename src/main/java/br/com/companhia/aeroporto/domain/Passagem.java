@@ -23,6 +23,9 @@ public class Passagem implements Serializable {
     @Column(name = "portao_embarque")
     private String portaoEmbarque;
 
+    @Column(name = "uuid_usuario")
+    private String uuidUsuario;
+
     @Column(name = "status")
     private String status;
 

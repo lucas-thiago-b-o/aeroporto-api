@@ -11,6 +11,7 @@ public class PassagemDTO {
 
     private Long id;
     private String portaoEmbarque;
+    private String uuidUsuario;
     private LocalDateTime dataHoraVoo;
     private Long valor;
     private String numeroIdentificacao;
