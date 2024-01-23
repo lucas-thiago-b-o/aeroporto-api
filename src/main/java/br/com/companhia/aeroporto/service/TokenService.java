@@ -24,7 +24,8 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("auth-api")
-                    .withKeyId(usuario.getId())
+                    .withJWTId(usuario.getId())
+                    .withClaim("role", usuario.getRole().getRole())
                     .withSubject(usuario.getUsername())
                     .withExpiresAt(getExperitationDate())
                     .sign(algorithm);
