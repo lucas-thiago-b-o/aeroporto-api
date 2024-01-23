@@ -16,12 +16,13 @@ public class Bagagem implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "")
+    @Column(name = "numero_identificacao")
     private Long numeroIdentificacao;
 
-    @Column(name = "")
+    @Column(name = "is_despachada")
     private Boolean isDespachada;
 
 }

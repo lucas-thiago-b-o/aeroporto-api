@@ -16,8 +16,9 @@ public class Assento implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "")
+    @Column(name = "nome")
     private String nome;
 }

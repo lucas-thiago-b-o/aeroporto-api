@@ -17,21 +17,22 @@ public class Passagem implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "")
+    @Column(name = "portao_embarque")
     private String portaoEmbarque;
 
-    @Column(name = "")
+    @Column(name = "data_hora_voo")
     private LocalDateTime dataHoraVoo;
 
-    @Column(name = "")
+    @Column(name = "valor")
     private Long valor;
 
-    @Column(name = "")
+    @Column(name = "numero_identificacao")
     private Long numeroIdentificacao;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "")
+    @JoinColumn(name = "voo_id")
     private Voo voo;
 }
