@@ -1,8 +1,11 @@
 package br.com.companhia.aeroporto.config;
 
 import br.com.companhia.aeroporto.domain.*;
+import br.com.companhia.aeroporto.dto.RegisterDTO;
+import br.com.companhia.aeroporto.enums.UsuarioRole;
 import br.com.companhia.aeroporto.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -40,6 +43,9 @@ public class DatabaseInstanceInitializer {
     private UfRepository ufRepository;
 
     @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
     private VooRepository vooRepository;
 
     public void instanciaDadosNaBase() {
@@ -55,6 +61,14 @@ public class DatabaseInstanceInitializer {
         passageiroRepository.save(getPassageiro());
 
         passagemRepository.save(getPassagem());
+
+        usuarioRepository.save(getUsuarioAdmin());
+    }
+
+    public Usuario getUsuarioAdmin() {
+        String encryptedPassword = new BCryptPasswordEncoder().encode(UsuarioRole.ADMIN.getRole());
+
+        return new Usuario(UsuarioRole.ADMIN.getRole(), encryptedPassword, UsuarioRole.ADMIN);
     }
 
     public Uf getUfBahia() {
