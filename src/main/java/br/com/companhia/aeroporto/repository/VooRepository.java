@@ -23,7 +23,16 @@ public interface VooRepository extends JpaRepository<Voo, Long> {
                    " WHERE ae.cidade_id = ?1 AND v.status = 'Programado'" +
                    " AND v.data_hora_marcado > (NOW() + INTERVAL 5 HOUR) " +
                    "  AND v.passageiro_id IS NULL", nativeQuery = true)
-    List<Voo> findAllByUfId(Long id);
+    List<Voo> findAllByCidadeId(Long id);
+
+    @Query(value = "SELECT v.* FROM voo as v " +
+                   " JOIN aeroporto AS aeo ON v.aeroporto_origem_id = aeo.id " +
+                   " JOIN aeroporto AS aed ON v.aeroporto_destino_id = aed.id " +
+                   " WHERE aeo.cidade_id = ?1 AND aed.cidade_id = ?2 " +
+                   " AND v.status = 'Programado' " +
+                   " AND v.data_hora_marcado > (NOW() + INTERVAL 5 HOUR) " +
+                   "  AND v.passageiro_id IS NULL", nativeQuery = true)
+    List<Voo> findAllByCidadesIds(Long idOrigem, Long idDestino);
 
     @Query(value = "SELECT v.* FROM voo as v " +
                    " JOIN aeroporto AS ae ON v.aeroporto_origem_id = ae.id " +
@@ -31,7 +40,7 @@ public interface VooRepository extends JpaRepository<Voo, Long> {
                    " WHERE c.uf_id = ?1 AND v.status = 'Programado'" +
                    " AND v.data_hora_marcado > (NOW() + INTERVAL 5 HOUR) " +
                    "  AND v.passageiro_id IS NULL", nativeQuery = true)
-    List<Voo> findAllCidadeId(Long id);
+    List<Voo> findAllByUfId(Long id);
 
     @Query(value = "UPDATE Voo v SET v.passageiro = ?1 WHERE v.classe.id = ?2 AND v.id = ?3")
     void updateAssentoVooDaPassagemComprada(Passageiro passageiro, Long classeId, Long vooId);

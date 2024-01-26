@@ -5,9 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PassagemRepository extends JpaRepository<Passagem, Long> {
 
     @Query(value = "UPDATE Passagem p SET p.status = 'Cancelada' WHERE p.id = ?1")
     void cancelarPassagem(Long idPassagem);
+
+    List<Passagem> findAllByUuidUsuario(String uuid);
 }

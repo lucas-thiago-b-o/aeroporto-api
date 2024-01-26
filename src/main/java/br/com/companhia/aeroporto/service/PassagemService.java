@@ -36,14 +36,12 @@ public class PassagemService {
     @Autowired
     private ModelMapping<Bagagem, BagagemDTO> modelMappingBagagem;
 
-    @Autowired
-    private ModelMapping<Passageiro, PassageiroDTO> modelMappingPassageiro;
-
-    @Autowired
-    private ModelMapping<Classe, ClasseDTO> modelMappingClasse;
-
     public List<PassagemDTO> findAll() {
         return modelMappingPassagem.convertToDtoList(passagemRepository.findAll(), PassagemDTO.class);
+    }
+
+    public List<PassagemDTO> findAllByUuidUsuario(String uuidUsuario) {
+        return modelMappingPassagem.convertToDtoList(passagemRepository.findAllByUuidUsuario(uuidUsuario), PassagemDTO.class);
     }
 
     public String comprarPassagem(ComprarPassagemDTO comprarPassagemDTO) {

@@ -31,6 +31,11 @@ public class VooResource {
         return Optional.ofNullable(vooService.findAllByCidadeId(idCidade)).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
     }
 
+    @GetMapping(value = "/voo/aeroporto/cidade_origem/{idOrigem}/cidade_destino/{idDestino}")
+    public ResponseEntity<List<VooDTO>> findAllByCidadesIds(@PathVariable Long idOrigem, @PathVariable Long idDestino) {
+        return Optional.ofNullable(vooService.findAllByCidadesIds(idOrigem, idDestino)).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
+    }
+
     @GetMapping(value = "/voo/aeroporto/estado/{idEstado}")
     public ResponseEntity<List<VooDTO>> findAllByEstadoId(@PathVariable Long idEstado) {
         return Optional.ofNullable(vooService.findAllByUfId(idEstado)).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());

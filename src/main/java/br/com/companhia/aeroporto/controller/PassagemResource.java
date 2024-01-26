@@ -23,6 +23,11 @@ public class PassagemResource {
         return Optional.ofNullable(passagemService.findAll()).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
     }
 
+    @GetMapping(value = "/passagem/{uuidUsuario}")
+    public ResponseEntity<List<PassagemDTO>> findAllByUuidUsuario(@PathVariable String uuidUsuario) {
+        return Optional.ofNullable(passagemService.findAllByUuidUsuario(uuidUsuario)).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
+    }
+
     @PostMapping(value = "/passagem")
     public ResponseEntity<String> comprarPassagem(@RequestBody ComprarPassagemDTO comprarPassagemDTO) {
         return Optional.ofNullable(passagemService.comprarPassagem(comprarPassagemDTO)).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
