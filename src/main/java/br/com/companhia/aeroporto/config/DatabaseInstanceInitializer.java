@@ -1,7 +1,6 @@
 package br.com.companhia.aeroporto.config;
 
 import br.com.companhia.aeroporto.domain.*;
-import br.com.companhia.aeroporto.dto.RegisterDTO;
 import br.com.companhia.aeroporto.enums.UsuarioRole;
 import br.com.companhia.aeroporto.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +74,7 @@ public class DatabaseInstanceInitializer {
         Uf bahia = new Uf();
 
         bahia.setId(1L);
-        bahia.setNome("Bahia");
+        bahia.setNome("BA");
 
         return bahia;
     }
@@ -84,7 +83,7 @@ public class DatabaseInstanceInitializer {
         Uf acre = new Uf();
 
         acre.setId(3L);
-        acre.setNome("Acre");
+        acre.setNome("AC");
 
         return acre;
     }
@@ -93,7 +92,7 @@ public class DatabaseInstanceInitializer {
         Uf rj = new Uf();
 
         rj.setId(2L);
-        rj.setNome("Rio de Janeiro");
+        rj.setNome("RJ");
 
         return rj;
     }
