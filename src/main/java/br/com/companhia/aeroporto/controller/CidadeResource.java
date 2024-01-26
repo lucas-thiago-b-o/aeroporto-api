@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/cidades")
-public class CIdadeResource {
+public class CidadeResource {
 
     @Autowired
     private CidadeService cidadeService;
