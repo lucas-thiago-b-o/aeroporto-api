@@ -48,14 +48,6 @@ public class Voo implements Serializable {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="aeroporto_destino_id", referencedColumnName="id")
     private Aeroporto aeroportoDestino;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "passageiro_id")
-    private Passageiro passageiro;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "classe_id")
-    private Classe classe;
 }
 
 /*

@@ -45,8 +45,8 @@ public class PassagemService {
     }
 
     public String comprarPassagem(ComprarPassagemDTO comprarPassagemDTO) {
-        String codigoAeroportuario = getCodigoAeroportuario(comprarPassagemDTO);
-        String codigoUnicoPassagem = geraCodigoUnicoPassagem(codigoAeroportuario);
+        //String codigoAeroportuario = getCodigoAeroportuario(comprarPassagemDTO);
+        String codigoUnicoPassagem = geraCodigoUnicoPassagem(null);
 
         salvarBagagensEpassageiros(comprarPassagemDTO, (codigoUnicoPassagem + "BGA"));
 
@@ -68,8 +68,8 @@ public class PassagemService {
                    bagagemRepository.save(bagagem);
                    Passageiro passageiro = mountPassageiroEntity(passageiroDTO.getPassageiroDTO(), bagagem);
                    passageiroRepository.save(passageiro);
-                   vooRepository.updateAssentoVooDaPassagemComprada(passageiro, passageiroDTO.getClasseId(),
-                                                                    comprarPassagemDTO.getPassagemDTO().getVoo().getId());
+                   /*vooRepository.updateAssentoVooDaPassagemComprada(passageiro, passageiroDTO.getClasseId(),
+                                                                    comprarPassagemDTO.getPassagemDTO().getVoo().getId());*/
                })
        );
     }
@@ -100,10 +100,10 @@ public class PassagemService {
     private Passagem mountPassagemEntity(ComprarPassagemDTO comprarPassagemDTO, String codigoUnicoPassagem) {
         Passagem passagem = new Passagem();
 
-        Voo voo = vooRepository.findById(comprarPassagemDTO.getPassagemDTO().getVoo().getId())
-                 .orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+        /*Voo voo = vooRepository.findById(comprarPassagemDTO.getPassagemDTO().getVoo().getId())
+                 .orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));*/
 
-        passagem.setVoo(voo);
+        //passagem.setVoo(voo);
         passagem.setStatus("Ativa");
         passagem.setValor(comprarPassagemDTO.getPassagemDTO().getValor());
         passagem.setDataHoraVoo(LocalDateTime.now());
@@ -114,9 +114,9 @@ public class PassagemService {
         return passagem;
     }
 
-    private String getCodigoAeroportuario(ComprarPassagemDTO comprarPassagemDTO) {
+    /*private String getCodigoAeroportuario(ComprarPassagemDTO comprarPassagemDTO) {
         return comprarPassagemDTO.getPassagemDTO().getVoo().getAeroportoDestino().getCodigoAeroportuario();
-    }
+    }*/
 
     private String geraCodigoUnicoPassagem(String ae) {
         return new StringBuilder(ae).reverse().toString() +

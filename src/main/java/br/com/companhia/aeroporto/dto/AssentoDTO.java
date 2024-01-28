@@ -9,4 +9,5 @@ public class AssentoDTO {
 
     private Long id;
     private String nome;
+    private PassagemDTO passagemDTO;
 }

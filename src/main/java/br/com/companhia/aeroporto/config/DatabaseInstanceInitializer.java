@@ -8,15 +8,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 public class DatabaseInstanceInitializer {
 
-    public static final Random random = new Random();
+    public static final Random RANDOM = new Random();
 
+    public static final List<Classe> CLASSES = new ArrayList<>();
+    public static final List<Assento> ASSENTOS = new ArrayList<>();
     @Autowired
     AeroportoRepository aeroportoRepository;
 
@@ -58,6 +62,8 @@ public class DatabaseInstanceInitializer {
         bagagemRepository.save(getBagagem(false));
 
         passageiroRepository.save(getPassageiro());
+
+        addVoos();
 
         passagemRepository.save(getPassagem());
 
@@ -223,7 +229,7 @@ public class DatabaseInstanceInitializer {
         Passagem passagem = new Passagem();
 
         passagem.setId(1L);
-        passagem.setVoo(getVoo());
+        passagem.setClasse(CLASSES.get(0));
         passagem.setDataHoraVoo(LocalDateTime.now());
         passagem.setNumeroIdentificacao("UDS22223012411");
         passagem.setPortaoEmbarque("Portao");
@@ -232,80 +238,95 @@ public class DatabaseInstanceInitializer {
         return passagem;
     }
 
-    public Voo getVoo() {
+    public void addVoos() {
         Voo voo = new Voo();
-        AtomicLong atomicLong = new AtomicLong();
-        atomicLong.set(0);
+        AtomicLong idsGerais = new AtomicLong();
+        idsGerais.set(0);
+        AtomicInteger intToReset = new AtomicInteger();
+        intToReset.set(-1);
+        AtomicInteger vooAtual = new AtomicInteger();
+        vooAtual.set(0);
 
-        for (char letra = 'A'; letra <= 'Z'; letra++) {
-            for (int i = 1; i <= 26; i++) {
-                long id = atomicLong.incrementAndGet();
+        for (int l = 0; l < 4; l++) {
 
-                Assento assento = saveAndGetAssento(id, letra, i);
-                Classe classe = saveAndGetClasse(id, i, assento);
-                voo = mountVoo(id, getAeroportoSalvador(), getAeroportoRioDeJaneiroSantosDumont(),
-                                   getAeroportoPortoSeguro(), getAeroportoCruzeiroDoSul(),
-                               classe);
-
-                vooRepository.save(voo);
+            Aeroporto aeroportoOrigem;
+            Aeroporto aeroportoDestino;
+            if (l == 0) {
+                aeroportoOrigem = getAeroportoSalvador();
+                aeroportoDestino = getAeroportoRioDeJaneiroSantosDumont();
+            } else if (l == 1) {
+                aeroportoOrigem = getAeroportoPortoSeguro();
+                aeroportoDestino = getAeroportoRioDeJaneiroSantosDumont();
+            } else if (l == 2) {
+                aeroportoOrigem = getAeroportoCruzeiroDoSul();
+                aeroportoDestino = getAeroportoRioDeJaneiroSantosDumont();
+            } else {
+                aeroportoOrigem = getAeroportoRioDeJaneiroSantosDumont();
+                aeroportoDestino = getAeroportoSalvador();
             }
-        }
 
-        return voo;
+            vooAtual.getAndIncrement();
+
+            voo = vooRepository.save(mountVoo(vooAtual.get(), aeroportoOrigem, aeroportoDestino));
+            for (char letra = 'A'; letra <= 'Z'; letra++) {
+                for (int i = 1; i <= 26; i++) {
+                    long id = idsGerais.incrementAndGet();
+                    int idClasse = intToReset.incrementAndGet();
+
+                    if (id <= 676) {
+                        ASSENTOS.add(saveAndGetAssento(id, letra, i));
+                    } else if (idClasse == 676) {
+                        intToReset.set(-1);
+                        idClasse = intToReset.incrementAndGet();
+                    }
+
+                  CLASSES.add(saveAndGetClasse(id, i, ASSENTOS.get(idClasse), voo));
+                }
+            }
+
+            classeRepository.saveAll(CLASSES);
+        }
     }
 
     private Assento saveAndGetAssento(long id, char letra, int i) {
         Assento assento = new Assento();
         assento.setId(id);
         assento.setNome(String.valueOf(letra) + Integer.toUnsignedLong(i));
+        assento.setPassageiro(id == 1 ? getPassageiro() : null);
         assentoRepository.save(assento);
         return assento;
     }
 
-    private Classe saveAndGetClasse(long id, int i, Assento assento) {
+    private Classe saveAndGetClasse(long id, int i, Assento assento, Voo voo) {
         Classe classe = new Classe();
         classe.setId(id);
         classe.setAssento(assento);
         classe.setNome(i <= 11 ? "Primeira Classe" : "Classe Econômica");
+        classe.setVoo(voo);
         classeRepository.save(classe);
         return classe;
     }
 
-    private Voo mountVoo(long id, Aeroporto aeroportoSalvador, Aeroporto aeroportoRioDeJaneiroSantosDumont,
-                                  Aeroporto aeroportoPortoSeguro, Aeroporto aeroportoCruzeiroDoSul,
-                         Classe classe) {
+    private Voo mountVoo(long id, Aeroporto aeroportoOrigem, Aeroporto aeroportoDestino) {
         Voo voo = new Voo();
         voo.setId(id);
 
-        if (id <= 169) {
-            voo.setAeroportoOrigem(aeroportoSalvador);
-            voo.setAeroportoDestino(aeroportoRioDeJaneiroSantosDumont);
-        } else if (id >= 338 && id < 507) {
-            voo.setAeroportoOrigem(aeroportoPortoSeguro);
-            voo.setAeroportoDestino(aeroportoRioDeJaneiroSantosDumont);
-        } else if (id >= 507 && id < 591) {
-            voo.setAeroportoOrigem(aeroportoCruzeiroDoSul);
-            voo.setAeroportoDestino(aeroportoRioDeJaneiroSantosDumont);
-        } else {
-            voo.setAeroportoOrigem(aeroportoRioDeJaneiroSantosDumont);
-            voo.setAeroportoDestino(aeroportoSalvador);
-        }
+        voo.setAeroportoOrigem(aeroportoOrigem);
+        voo.setAeroportoDestino(aeroportoDestino);
 
         voo.setDataHoraChegada(LocalDateTime.now());
         voo.setDataHoraMarcado(LocalDateTime.now().plusHours(24));
         voo.setDataHoraPartida(LocalDateTime.now());
         voo.setDataHoraPrevisao(LocalDateTime.now());
         voo.setNome("Voo " + id);
-        voo.setClasse(classe);
         voo.setStatus("Programado");
         voo.setValor(geraValorVooEpassagem());
-        voo.setPassageiro(id == 1 ? getPassageiro() : null);
 
         return voo;
     }
 
     public Long geraValorVooEpassagem() {
-        int valorAleatorio = random.nextInt(39001) + 1000;
+        int valorAleatorio = RANDOM.nextInt(39001) + 1000;
 
         return Integer.toUnsignedLong(valorAleatorio);
     }

@@ -42,7 +42,7 @@ public interface VooRepository extends JpaRepository<Voo, Long> {
                    "  AND v.passageiro_id IS NULL", nativeQuery = true)
     List<Voo> findAllByUfId(Long id);
 
-    @Query(value = "UPDATE Voo v SET v.passageiro = ?1 WHERE v.classe.id = ?2 AND v.id = ?3")
-    void updateAssentoVooDaPassagemComprada(Passageiro passageiro, Long classeId, Long vooId);
+    /*@Query(value = "UPDATE Voo v SET v.passageiro = ?1 WHERE v.classe.id = ?2 AND v.id = ?3")
+    void updateAssentoVooDaPassagemComprada(Passageiro passageiro, Long classeId, Long vooId);*/
 
 }

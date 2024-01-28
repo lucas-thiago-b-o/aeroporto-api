@@ -39,6 +39,6 @@ public class Passagem implements Serializable {
     private String numeroIdentificacao;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "voo_id")
-    private Voo voo;
+    @JoinColumn(name = "classe_id")
+    private Classe classe;
 }

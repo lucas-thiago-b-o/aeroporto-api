@@ -25,4 +25,8 @@ public class Classe implements Serializable {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "assento_id")
     private Assento assento;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "voo_id")
+    private Voo voo;
 }
