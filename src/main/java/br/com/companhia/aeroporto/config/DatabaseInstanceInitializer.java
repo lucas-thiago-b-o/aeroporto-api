@@ -19,8 +19,8 @@ public class DatabaseInstanceInitializer {
 
     public static final Random RANDOM = new Random();
 
-    public static final List<Classe> CLASSES = new ArrayList<>();
-    public static final List<Assento> ASSENTOS = new ArrayList<>();
+    protected static final List<Classe> CLASSES = new ArrayList<>();
+    protected static final List<Assento> ASSENTOS = new ArrayList<>();
     @Autowired
     AeroportoRepository aeroportoRepository;
 
@@ -239,9 +239,9 @@ public class DatabaseInstanceInitializer {
     }
 
     public void addVoos() {
-        Voo voo = new Voo();
         AtomicLong idsGerais = new AtomicLong();
         idsGerais.set(0);
+
         AtomicInteger intToReset = new AtomicInteger();
         intToReset.set(-1);
         AtomicInteger vooAtual = new AtomicInteger();
@@ -267,24 +267,29 @@ public class DatabaseInstanceInitializer {
 
             vooAtual.getAndIncrement();
 
-            voo = vooRepository.save(mountVoo(vooAtual.get(), aeroportoOrigem, aeroportoDestino));
-            for (char letra = 'A'; letra <= 'Z'; letra++) {
-                for (int i = 1; i <= 26; i++) {
-                    long id = idsGerais.incrementAndGet();
-                    int idClasse = intToReset.incrementAndGet();
-
-                    if (id <= 676) {
-                        ASSENTOS.add(saveAndGetAssento(id, letra, i));
-                    } else if (idClasse == 676) {
-                        intToReset.set(-1);
-                        idClasse = intToReset.incrementAndGet();
-                    }
-
-                  CLASSES.add(saveAndGetClasse(id, i, ASSENTOS.get(idClasse), voo));
-                }
-            }
+            addClasses(vooAtual.get(), idsGerais, intToReset, aeroportoOrigem, aeroportoDestino);
 
             classeRepository.saveAll(CLASSES);
+        }
+    }
+
+    private void addClasses(int vooAtual, AtomicLong idsGerais, AtomicInteger intToReset, Aeroporto aeroportoOrigem, Aeroporto aeroportoDestino) {
+        Voo voo = vooRepository.save(mountVoo(vooAtual, aeroportoOrigem, aeroportoDestino));
+
+        for (char letra = 'A'; letra <= 'Z'; letra++) {
+            for (int i = 1; i <= 26; i++) {
+                long id = idsGerais.incrementAndGet();
+                int idClasse = intToReset.incrementAndGet();
+
+                if (id <= 676) {
+                    ASSENTOS.add(saveAndGetAssento(id, letra, i));
+                } else if (idClasse == 676) {
+                    intToReset.set(-1);
+                    idClasse = intToReset.incrementAndGet();
+                }
+
+                CLASSES.add(saveAndGetClasse(id, i, ASSENTOS.get(idClasse), voo));
+            }
         }
     }
 
