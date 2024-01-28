@@ -38,16 +38,6 @@ public class VooService {
     }
 
     public List<VooDTO> findAllByCidadesIds(Long idOrigem, Long idDestino) {
-        List<VooDTO> voosDTO = new ArrayList<>();
-
-        List<Voo> voos = vooRepository.findAllByCidadesIds(idOrigem, idDestino);
-
-        voos.stream().filter(f ->
-                f.getAeroportoOrigem().getId().equals(idOrigem) && f.getAeroportoDestino().getId().equals(idDestino)
-        ).forEach(voo -> {
-
-        });
-
         return modelMapping.convertToDtoList(vooRepository.findAllByCidadesIds(idOrigem, idDestino), VooDTO.class);
     }
 

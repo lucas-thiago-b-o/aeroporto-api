@@ -5,10 +5,7 @@ import br.com.companhia.aeroporto.dto.*;
 import br.com.companhia.aeroporto.exception.DataIntegrityViolationException;
 import br.com.companhia.aeroporto.exception.ObjectNotFoundException;
 import br.com.companhia.aeroporto.model.ModelMapping;
-import br.com.companhia.aeroporto.repository.BagagemRepository;
-import br.com.companhia.aeroporto.repository.PassageiroRepository;
-import br.com.companhia.aeroporto.repository.PassagemRepository;
-import br.com.companhia.aeroporto.repository.VooRepository;
+import br.com.companhia.aeroporto.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +16,7 @@ import java.util.List;
 public class PassagemService {
 
     @Autowired
-    private VooRepository vooRepository;
+    private ClasseRepository classeRepository;
 
     @Autowired
     private PassagemRepository passagemRepository;
@@ -45,8 +42,8 @@ public class PassagemService {
     }
 
     public String comprarPassagem(ComprarPassagemDTO comprarPassagemDTO) {
-        //String codigoAeroportuario = getCodigoAeroportuario(comprarPassagemDTO);
-        String codigoUnicoPassagem = geraCodigoUnicoPassagem(null);
+        String codigoAeroportuario = getCodigoAeroportuario(comprarPassagemDTO);
+        String codigoUnicoPassagem = geraCodigoUnicoPassagem(codigoAeroportuario);
 
         salvarBagagensEpassageiros(comprarPassagemDTO, (codigoUnicoPassagem + "BGA"));
 
@@ -68,8 +65,8 @@ public class PassagemService {
                    bagagemRepository.save(bagagem);
                    Passageiro passageiro = mountPassageiroEntity(passageiroDTO.getPassageiroDTO(), bagagem);
                    passageiroRepository.save(passageiro);
-                   /*vooRepository.updateAssentoVooDaPassagemComprada(passageiro, passageiroDTO.getClasseId(),
-                                                                    comprarPassagemDTO.getPassagemDTO().getVoo().getId());*/
+                   classeRepository.updateAssentoVooDaPassagemComprada(passageiro, passageiroDTO.getClasseId(),
+                                                                       comprarPassagemDTO.getPassagemDTO().getClasseDTO().getVooDTO().getId());
                })
        );
     }
@@ -100,10 +97,10 @@ public class PassagemService {
     private Passagem mountPassagemEntity(ComprarPassagemDTO comprarPassagemDTO, String codigoUnicoPassagem) {
         Passagem passagem = new Passagem();
 
-        /*Voo voo = vooRepository.findById(comprarPassagemDTO.getPassagemDTO().getVoo().getId())
-                 .orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));*/
+        Classe classe = classeRepository.findById(comprarPassagemDTO.getPassagemDTO().getClasseDTO().getId())
+                                        .orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
 
-        //passagem.setVoo(voo);
+        passagem.setClasse(classe);
         passagem.setStatus("Ativa");
         passagem.setValor(comprarPassagemDTO.getPassagemDTO().getValor());
         passagem.setDataHoraVoo(LocalDateTime.now());
@@ -114,9 +111,9 @@ public class PassagemService {
         return passagem;
     }
 
-    /*private String getCodigoAeroportuario(ComprarPassagemDTO comprarPassagemDTO) {
-        return comprarPassagemDTO.getPassagemDTO().getVoo().getAeroportoDestino().getCodigoAeroportuario();
-    }*/
+    private String getCodigoAeroportuario(ComprarPassagemDTO comprarPassagemDTO) {
+        return comprarPassagemDTO.getPassagemDTO().getClasseDTO().getVooDTO().getAeroportoDestino().getCodigoAeroportuario();
+    }
 
     private String geraCodigoUnicoPassagem(String ae) {
         return new StringBuilder(ae).reverse().toString() +
