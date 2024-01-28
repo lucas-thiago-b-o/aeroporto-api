@@ -1,10 +1,8 @@
 package br.com.companhia.aeroporto.service;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-@RestController
-@RequestMapping(value = "/passageiros")
+@Service
 public class PassageiroService {
 
 }
