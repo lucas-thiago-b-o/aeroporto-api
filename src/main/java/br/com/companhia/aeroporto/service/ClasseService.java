@@ -1,7 +1,13 @@
 package br.com.companhia.aeroporto.service;
 
+import br.com.companhia.aeroporto.domain.Assento;
 import br.com.companhia.aeroporto.domain.Classe;
+import br.com.companhia.aeroporto.domain.Passageiro;
+import br.com.companhia.aeroporto.domain.Voo;
+import br.com.companhia.aeroporto.dto.AssentoDTO;
 import br.com.companhia.aeroporto.dto.ClasseDTO;
+import br.com.companhia.aeroporto.dto.PassageiroDTO;
+import br.com.companhia.aeroporto.dto.VooDTO;
 import br.com.companhia.aeroporto.exception.ObjectNotFoundException;
 import br.com.companhia.aeroporto.model.ModelMapping;
 import br.com.companhia.aeroporto.repository.ClasseRepository;
@@ -18,19 +24,41 @@ public class ClasseService {
     private ClasseRepository classeRepository;
 
     @Autowired
-    private ModelMapping<Classe, ClasseDTO> modelMapping;
+    private ModelMapping<Classe, ClasseDTO> classeModelMapping;
+
+    @Autowired
+    private ModelMapping<Voo, VooDTO> vooModelMapping;
+
+    @Autowired
+    private ModelMapping<Assento, AssentoDTO> assentoModelMapping;
+
+    @Autowired
+    private ModelMapping<Passageiro, PassageiroDTO> passageiroModelMapping;
 
     public List<ClasseDTO> findAll() {
-        return modelMapping.convertToDtoList(classeRepository.findAll(), ClasseDTO.class);
+        return classeModelMapping.convertToDtoList(classeRepository.findAll(), ClasseDTO.class);
     }
 
     public List<ClasseDTO> getAllClassesByVooId(Long id) {
-        return modelMapping.convertToDtoList(classeRepository.findAllByVooId(id), ClasseDTO.class);
+        List<Classe> classesEntity = classeRepository.findAllByVooId(id);
+        List<ClasseDTO> classesDTO = classeModelMapping.convertToDtoList(classesEntity, ClasseDTO.class);
+
+        classesDTO.forEach(classe -> {
+            VooDTO vooDTO = vooModelMapping.convertToDto(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getVoo(), VooDTO.class);
+            classe.setVooDTO(vooDTO);
+
+            AssentoDTO assentoDTO = assentoModelMapping.convertToDto(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getAssento(), AssentoDTO.class);
+            PassageiroDTO passageiroDTO = passageiroModelMapping.convertToDto(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getAssento().getPassageiro(), PassageiroDTO.class);
+            assentoDTO.setPassageiroDTO(passageiroDTO);
+            classe.setAssentos(assentoDTO);
+        });
+
+        return classesDTO;
     }
 
     public ClasseDTO findById(Long id) {
         return Optional.of(classeRepository.findById(id)).filter(Optional::isPresent)
-                .map(m -> modelMapping.convertToDto(m.get(), ClasseDTO.class))
+                .map(m -> classeModelMapping.convertToDto(m.get(), ClasseDTO.class))
                 .orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
     }
 

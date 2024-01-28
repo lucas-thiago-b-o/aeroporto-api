@@ -11,6 +11,6 @@ public class ClasseDTO {
 
     private Long id;
     private String nome;
-    private List<AssentoDTO> assentos;
+    private AssentoDTO assentos;
     private VooDTO vooDTO;
 }
