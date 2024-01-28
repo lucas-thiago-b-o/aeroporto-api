@@ -306,7 +306,7 @@ public class DatabaseInstanceInitializer {
         Classe classe = new Classe();
         classe.setId(id);
         classe.setAssento(assento);
-        classe.setNome(i <= 11 ? "Primeira Classe" : "Classe Econômica");
+        classe.setNome(i <= 13 ? "Primeira Classe" : "Classe Econômica");
         classe.setVoo(voo);
         classeRepository.save(classe);
         return classe;
