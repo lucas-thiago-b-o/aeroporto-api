@@ -9,5 +9,5 @@ public class AssentoDTO {
 
     private Long id;
     private String nome;
-    private PassageiroDTO passageiroDTO;
+    private PassageiroDTO passageiro;
 }

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -48,8 +49,12 @@ public class ClasseService {
             classe.setVooDTO(vooDTO);
 
             AssentoDTO assentoDTO = assentoModelMapping.convertToDto(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getAssento(), AssentoDTO.class);
-            PassageiroDTO passageiroDTO = passageiroModelMapping.convertToDto(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getAssento().getPassageiro(), PassageiroDTO.class);
-            assentoDTO.setPassageiroDTO(passageiroDTO);
+
+            PassageiroDTO passageiroDTO = null;
+            if (Objects.nonNull(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getAssento().getPassageiro()))
+                passageiroDTO = passageiroModelMapping.convertToDto(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getAssento().getPassageiro(), PassageiroDTO.class);
+
+            assentoDTO.setPassageiro(passageiroDTO);
             classe.setAssentos(assentoDTO);
         });
 
