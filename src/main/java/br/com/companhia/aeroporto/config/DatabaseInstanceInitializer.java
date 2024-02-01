@@ -204,12 +204,12 @@ public class DatabaseInstanceInitializer {
 
         passageiro1.setId(1L);
         passageiro1.setDataNascimento(LocalDateTime.now());
-        passageiro1.setCpf(13140923759L);
+        passageiro1.setCpf("13140923759");
         passageiro1.setNomeCompleto("Lucas");
-        passageiro1.setRg(248142317L);
-        passageiro1.setPassaporte(12345L);
-        passageiro1.setContatoEmergencia(21912345678L);
-        passageiro1.setTelefone(21969487457L);
+        passageiro1.setRg("248142317");
+        passageiro1.setPassaporte("12345");
+        passageiro1.setContatoEmergencia("21912345678");
+        passageiro1.setTelefone("21969487457");
         passageiro1.setBagagem(getBagagem(false));
 
         return passageiro1;
@@ -233,7 +233,7 @@ public class DatabaseInstanceInitializer {
         passagem.setDataHoraVoo(LocalDateTime.now());
         passagem.setNumeroIdentificacao("UDS22223012411");
         passagem.setPortaoEmbarque("Portao");
-        passagem.setValor(geraValorVooEpassagem());
+        passagem.setValor(geraValorClasseAssento());
 
         return passagem;
     }
@@ -297,7 +297,6 @@ public class DatabaseInstanceInitializer {
         Assento assento = new Assento();
         assento.setId(id);
         assento.setNome(String.valueOf(letra) + Integer.toUnsignedLong(i));
-        assento.setPassageiro(id == 1 ? getPassageiro() : null);
         assentoRepository.save(assento);
         return assento;
     }
@@ -308,6 +307,8 @@ public class DatabaseInstanceInitializer {
         classe.setAssento(assento);
         classe.setNome(i <= 13 ? "Primeira Classe" : "Classe Econômica");
         classe.setVoo(voo);
+        classe.setPassageiro(id == 1 ? getPassageiro() : null);
+        classe.setValor(geraValorClasseAssento());
         classeRepository.save(classe);
         return classe;
     }
@@ -325,12 +326,11 @@ public class DatabaseInstanceInitializer {
         voo.setDataHoraPrevisao(LocalDateTime.now());
         voo.setNome("Voo " + id);
         voo.setStatus("Programado");
-        voo.setValor(geraValorVooEpassagem());
 
         return voo;
     }
 
-    public Long geraValorVooEpassagem() {
+    public Long geraValorClasseAssento() {
         int valorAleatorio = RANDOM.nextInt(39001) + 1000;
 
         return Integer.toUnsignedLong(valorAleatorio);
