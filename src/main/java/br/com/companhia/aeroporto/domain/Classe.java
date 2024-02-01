@@ -26,7 +26,14 @@ public class Classe implements Serializable {
     @JoinColumn(name = "assento_id")
     private Assento assento;
 
+    @Column(name = "valor")
+    private Long valor;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "voo_id")
     private Voo voo;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "passageiro_id")
+    private Passageiro passageiro;
 }

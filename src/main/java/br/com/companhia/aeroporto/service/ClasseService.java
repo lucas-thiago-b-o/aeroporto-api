@@ -46,15 +46,15 @@ public class ClasseService {
 
         classesDTO.forEach(classe -> {
             VooDTO vooDTO = vooModelMapping.convertToDto(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getVoo(), VooDTO.class);
-            classe.setVooDTO(vooDTO);
+            classe.setVoo(vooDTO);
 
             AssentoDTO assentoDTO = assentoModelMapping.convertToDto(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getAssento(), AssentoDTO.class);
 
             PassageiroDTO passageiroDTO = null;
-            if (Objects.nonNull(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getAssento().getPassageiro()))
-                passageiroDTO = passageiroModelMapping.convertToDto(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getAssento().getPassageiro(), PassageiroDTO.class);
+            if (Objects.nonNull(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getPassageiro()))
+                passageiroDTO = passageiroModelMapping.convertToDto(classesEntity.stream().filter(f -> f.getId().equals(classe.getId())).toList().get(0).getPassageiro(), PassageiroDTO.class);
 
-            assentoDTO.setPassageiro(passageiroDTO);
+            classe.setPassageiro(passageiroDTO);
             classe.setAssentos(assentoDTO);
         });
 

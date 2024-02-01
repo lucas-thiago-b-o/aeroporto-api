@@ -24,22 +24,22 @@ public class Passageiro implements Serializable {
     private String nomeCompleto;
 
     @Column(name = "cpf")
-    private Long cpf;
+    private String cpf;
 
     @Column(name = "rg")
-    private Long rg;
+    private String rg;
 
     @Column(name = "passaporte")
-    private Long passaporte;
+    private String passaporte;
 
     @Column(name = "data_nascimento")
     private LocalDateTime dataNascimento;
 
     @Column(name = "telefone")
-    private Long telefone;
+    private String telefone;
 
     @Column(name = "contato_emergencia")
-    private Long contatoEmergencia;
+    private String contatoEmergencia;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "bagagem_id")

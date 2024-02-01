@@ -15,5 +15,5 @@ public class PassagemDTO {
     private LocalDateTime dataHoraVoo;
     private Long valor;
     private String numeroIdentificacao;
-    private ClasseDTO classeDTO;
+    private ClasseDTO classe;
 }

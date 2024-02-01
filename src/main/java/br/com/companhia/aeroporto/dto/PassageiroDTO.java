@@ -13,11 +13,11 @@ public class PassageiroDTO {
 
     private Long id;
     private String nomeCompleto;
-    private Long cpf;
-    private Long rg;
-    private Long passaporte;
+    private String cpf;
+    private String rg;
+    private String passaporte;
     private LocalDateTime dataNascimento;
-    private Long telefone;
-    private Long contatoEmergencia;
+    private String telefone;
+    private String contatoEmergencia;
     private List<BagagemDTO> bagagens;
 }

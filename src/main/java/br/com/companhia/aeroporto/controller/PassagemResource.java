@@ -1,13 +1,11 @@
 package br.com.companhia.aeroporto.controller;
 
-import br.com.companhia.aeroporto.dto.ComprarPassagemDTO;
 import br.com.companhia.aeroporto.dto.PassagemDTO;
 import br.com.companhia.aeroporto.service.PassagemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +27,8 @@ public class PassagemResource {
     }
 
     @PostMapping(value = "/passagem")
-    public ResponseEntity<String> comprarPassagem(@RequestBody ComprarPassagemDTO comprarPassagemDTO) {
-        return Optional.ofNullable(passagemService.comprarPassagem(comprarPassagemDTO)).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
+    public ResponseEntity<String> comprarPassagem(@RequestBody PassagemDTO passagemDTO) {
+        return Optional.ofNullable(passagemService.comprarPassagem(passagemDTO)).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
     }
 
     @PutMapping(value = "/passagem")

@@ -11,7 +11,6 @@ public class VooDTO {
 
     private Long id;
     private String nome;
-    private Long valor;
     private LocalDateTime dataHoraMarcado;
     private LocalDateTime dataHoraPartida;
     private LocalDateTime dataHoraPrevisao;

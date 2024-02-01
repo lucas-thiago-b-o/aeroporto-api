@@ -8,12 +8,21 @@ import br.com.companhia.aeroporto.model.ModelMapping;
 import br.com.companhia.aeroporto.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class PassagemService {
+
+    public static final Random RANDOM = new Random();
+
+    @Autowired
+    private AssentoRepository assentoRepository;
 
     @Autowired
     private ClasseRepository classeRepository;
@@ -28,6 +37,9 @@ public class PassagemService {
     private PassageiroRepository passageiroRepository;
 
     @Autowired
+    private ModelMapping<Assento, AssentoDTO> modelMappingAssento;
+
+    @Autowired
     private ModelMapping<Passagem, PassagemDTO> modelMappingPassagem;
 
     @Autowired
@@ -38,16 +50,25 @@ public class PassagemService {
     }
 
     public List<PassagemDTO> findAllByUuidUsuario(String uuidUsuario) {
-        return modelMappingPassagem.convertToDtoList(passagemRepository.findAllByUuidUsuario(uuidUsuario), PassagemDTO.class);
+        List<PassagemDTO> passagemDTOList = modelMappingPassagem.convertToDtoList(passagemRepository.findAllByUuidUsuarioAndStatusIsAtivo(uuidUsuario), PassagemDTO.class);
+        passagemDTOList.forEach(p -> {
+            Assento assento = assentoRepository.findAssentoByClasseId(p.getClasse().getId());
+            p.getClasse().setAssentos(modelMappingAssento.convertToDto(assento, AssentoDTO.class));
+
+            List<Bagagem> bagagemList = bagagemRepository.findBagagensByPassageiroId(p.getClasse().getPassageiro().getId());
+            p.getClasse().getPassageiro().setBagagens(modelMappingBagagem.convertToDtoList(bagagemList, BagagemDTO.class));
+        });
+
+        return passagemDTOList;
     }
 
-    public String comprarPassagem(ComprarPassagemDTO comprarPassagemDTO) {
-        String codigoAeroportuario = getCodigoAeroportuario(comprarPassagemDTO);
+    public String comprarPassagem(PassagemDTO passagemDTO) {
+        String codigoAeroportuario = getCodigoAeroportuario(passagemDTO);
         String codigoUnicoPassagem = geraCodigoUnicoPassagem(codigoAeroportuario);
 
-        salvarBagagensEpassageiros(comprarPassagemDTO, (codigoUnicoPassagem + "BGA"));
+        salvarBagagensEpassageiros(passagemDTO, (codigoUnicoPassagem + "BGA"));
 
-        Passagem passagem = mountPassagemEntity(comprarPassagemDTO, codigoUnicoPassagem);
+        Passagem passagem = mountPassagemEntity(passagemDTO, codigoUnicoPassagem);
 
         try {
             passagemRepository.save(passagem);
@@ -57,18 +78,17 @@ public class PassagemService {
         }
     }
 
-    private void salvarBagagensEpassageiros(ComprarPassagemDTO comprarPassagemDTO, String codigoUnicoBagagem) {
-       comprarPassagemDTO.getPassageirosAssentoDTO().forEach(passageiroDTO ->
-               passageiroDTO.getPassageiroDTO().getBagagens().forEach(bagagemDTO -> {
-                   bagagemDTO.setNumeroIdentificacao(codigoUnicoBagagem);
-                   Bagagem bagagem = modelMappingBagagem.convertToEntity(bagagemDTO, Bagagem.class);
-                   bagagemRepository.save(bagagem);
-                   Passageiro passageiro = mountPassageiroEntity(passageiroDTO.getPassageiroDTO(), bagagem);
-                   passageiroRepository.save(passageiro);
-                   classeRepository.updateAssentoVooDaPassagemComprada(passageiro, passageiroDTO.getClasseId(),
-                                                                       comprarPassagemDTO.getPassagemDTO().getClasseDTO().getVooDTO().getId());
-               })
-       );
+    private void salvarBagagensEpassageiros(PassagemDTO passagemDTO, String codigoUnicoBagagem) {
+        PassageiroDTO passageiroDTO = passagemDTO.getClasse().getPassageiro();
+
+        passageiroDTO.getBagagens().forEach(bagagemDTO -> {
+           bagagemDTO.setNumeroIdentificacao(codigoUnicoBagagem);
+           Bagagem bagagem = modelMappingBagagem.convertToEntity(bagagemDTO, Bagagem.class);
+           bagagemRepository.save(bagagem);
+           Passageiro passageiro = passageiroRepository.save(mountPassageiroEntity(passageiroDTO, bagagem));
+           classeRepository.updateAssentoVooDaPassagemComprada(passageiro, passagemDTO.getClasse().getId(),
+                                                               passagemDTO.getClasse().getVoo().getId());
+        });
     }
 
     public String cancelarPassagem(PassagemDTO passagemDTO) {
@@ -94,25 +114,37 @@ public class PassagemService {
         return passageiro;
     }
 
-    private Passagem mountPassagemEntity(ComprarPassagemDTO comprarPassagemDTO, String codigoUnicoPassagem) {
+    private Passagem mountPassagemEntity(PassagemDTO passagemDTO, String codigoUnicoPassagem) {
         Passagem passagem = new Passagem();
 
-        Classe classe = classeRepository.findById(comprarPassagemDTO.getPassagemDTO().getClasseDTO().getId())
+        Classe classe = classeRepository.findById(passagemDTO.getClasse().getId())
                                         .orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
 
         passagem.setClasse(classe);
         passagem.setStatus("Ativa");
-        passagem.setValor(comprarPassagemDTO.getPassagemDTO().getValor());
+        passagem.setValor(passagemDTO.getValor());
         passagem.setDataHoraVoo(LocalDateTime.now());
-        passagem.setUuidUsuario(comprarPassagemDTO.getPassagemDTO().getUuidUsuario());
-        passagem.setPortaoEmbarque(comprarPassagemDTO.getPassagemDTO().getPortaoEmbarque());
+        passagem.setUuidUsuario(passagemDTO.getUuidUsuario());
+        passagem.setPortaoEmbarque(geraPortaoEmbarque());
         passagem.setNumeroIdentificacao(codigoUnicoPassagem);
 
         return passagem;
     }
 
-    private String getCodigoAeroportuario(ComprarPassagemDTO comprarPassagemDTO) {
-        return comprarPassagemDTO.getPassagemDTO().getClasseDTO().getVooDTO().getAeroportoDestino().getCodigoAeroportuario();
+    private String getCodigoAeroportuario(PassagemDTO passagemDTO) {
+        return passagemDTO.getClasse().getVoo().getAeroportoDestino().getCodigoAeroportuario();
+    }
+
+    public String geraPortaoEmbarque() {
+        String letras = IntStream.range(0, 2)
+                .mapToObj(i -> String.valueOf((char) (RANDOM.nextInt(26) + 'A')))
+                .collect(Collectors.joining());
+
+        String numeros = IntStream.range(0, 4)
+                .mapToObj(i -> String.valueOf(RANDOM.nextInt(10)))
+                .collect(Collectors.joining());
+
+        return letras.concat(numeros);
     }
 
     private String geraCodigoUnicoPassagem(String ae) {

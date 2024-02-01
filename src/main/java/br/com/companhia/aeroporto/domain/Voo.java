@@ -26,9 +26,6 @@ public class Voo implements Serializable {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "valor")
-    private Long valor;
-
     @Column(name = "data_hora_marcado")
     private LocalDateTime dataHoraMarcado;
 

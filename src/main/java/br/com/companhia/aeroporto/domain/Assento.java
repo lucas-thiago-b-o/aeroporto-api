@@ -21,8 +21,4 @@ public class Assento implements Serializable {
 
     @Column(name = "nome")
     private String nome;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "passageiro_id")
-    private Passageiro passageiro;
 }
