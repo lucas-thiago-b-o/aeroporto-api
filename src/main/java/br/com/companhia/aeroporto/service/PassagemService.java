@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -43,6 +44,9 @@ public class PassagemService {
     private ModelMapping<Passagem, PassagemDTO> modelMappingPassagem;
 
     @Autowired
+    private ModelMapping<Passageiro, PassageiroDTO> modelMappingPassageiro;
+
+    @Autowired
     private ModelMapping<Bagagem, BagagemDTO> modelMappingBagagem;
 
     public List<PassagemDTO> findAll() {
@@ -50,10 +54,16 @@ public class PassagemService {
     }
 
     public List<PassagemDTO> findAllByUuidUsuario(String uuidUsuario) {
-        List<PassagemDTO> passagemDTOList = modelMappingPassagem.convertToDtoList(passagemRepository.findAllByUuidUsuarioAndStatusIsAtivo(uuidUsuario), PassagemDTO.class);
+        List<Passagem> passagemList = passagemRepository.findAllByUuidUsuarioAndStatusIsAtivo(uuidUsuario);
+        List<PassagemDTO> passagemDTOList = modelMappingPassagem.convertToDtoList(passagemList, PassagemDTO.class);
         passagemDTOList.forEach(p -> {
             Assento assento = assentoRepository.findAssentoByClasseId(p.getClasse().getId());
             p.getClasse().setAssentos(modelMappingAssento.convertToDto(assento, AssentoDTO.class));
+
+            if (Objects.isNull(p.getClasse().getPassageiro())) {
+                Passageiro passageiro = passagemList.stream().filter(f -> f.getClasse().getId().equals(p.getClasse().getId())).toList().get(0).getClasse().getPassageiro();
+                p.getClasse().setPassageiro(modelMappingPassageiro.convertToDto(passageiro, PassageiroDTO.class));
+            }
 
             List<Bagagem> bagagemList = bagagemRepository.findBagagensByPassageiroId(p.getClasse().getPassageiro().getId());
             p.getClasse().getPassageiro().setBagagens(modelMappingBagagem.convertToDtoList(bagagemList, BagagemDTO.class));
