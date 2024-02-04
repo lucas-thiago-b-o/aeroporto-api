@@ -13,8 +13,12 @@ import java.util.Optional;
 @RequestMapping(value = "/api/aeroportos")
 public class AeroportoResource {
 
+    private final AeroportoService aeroportoService;
+
     @Autowired
-    private AeroportoService aeroportoService;
+    public AeroportoResource(AeroportoService aeroportoService) {
+        this.aeroportoService = aeroportoService;
+    }
 
     @GetMapping(value = "/aeroporto")
     public ResponseEntity<List<AeroportoDTO>> findAll() {
