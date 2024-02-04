@@ -54,19 +54,21 @@ public class PassagemService {
     }
 
     public List<PassagemDTO> findAllByUuidUsuario(String uuidUsuario) {
-        List<Passagem> passagemList = passagemRepository.findAllByUuidUsuarioAndStatusIsAtivo(uuidUsuario);
+        List<Passagem> passagemList = passagemRepository.findAllByUuidUsuario(uuidUsuario);
         List<PassagemDTO> passagemDTOList = modelMappingPassagem.convertToDtoList(passagemList, PassagemDTO.class);
         passagemDTOList.forEach(p -> {
             Assento assento = assentoRepository.findAssentoByClasseId(p.getClasse().getId());
             p.getClasse().setAssentos(modelMappingAssento.convertToDto(assento, AssentoDTO.class));
 
-            if (Objects.isNull(p.getClasse().getPassageiro())) {
-                Passageiro passageiro = passagemList.stream().filter(f -> f.getClasse().getId().equals(p.getClasse().getId())).toList().get(0).getClasse().getPassageiro();
+            Passageiro passageiro = passagemList.stream().filter(f -> f.getClasse().getId().equals(p.getClasse().getId())).toList().get(0).getClasse().getPassageiro();
+            if (Objects.isNull(p.getClasse().getPassageiro()) && Objects.nonNull(passageiro)) {
                 p.getClasse().setPassageiro(modelMappingPassageiro.convertToDto(passageiro, PassageiroDTO.class));
             }
 
-            List<Bagagem> bagagemList = bagagemRepository.findBagagensByPassageiroId(p.getClasse().getPassageiro().getId());
-            p.getClasse().getPassageiro().setBagagens(modelMappingBagagem.convertToDtoList(bagagemList, BagagemDTO.class));
+            if (Objects.nonNull(p.getClasse().getPassageiro())) {
+                List<Bagagem> bagagemList = bagagemRepository.findBagagensByPassageiroId(p.getClasse().getPassageiro().getId());
+                p.getClasse().getPassageiro().setBagagens(modelMappingBagagem.convertToDtoList(bagagemList, BagagemDTO.class));
+            }
         });
 
         return passagemDTOList;
@@ -104,6 +106,8 @@ public class PassagemService {
     public String cancelarPassagem(PassagemDTO passagemDTO) {
         try {
             passagemRepository.cancelarPassagem(passagemDTO.getId());
+            classeRepository.updateAssentoVooDaPassagemComprada(null, passagemDTO.getClasse().getId(),
+                                                                passagemDTO.getClasse().getVoo().getId());
             return "Passagem cancelada com sucesso!";
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException(e.getMessage());
