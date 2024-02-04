@@ -17,5 +17,10 @@ public interface PassagemRepository extends JpaRepository<Passagem, Long> {
     @Query(value = "UPDATE Passagem p SET p.status = 'Cancelada' WHERE p.id = ?1")
     void cancelarPassagem(Long idPassagem);
 
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE Passagem p SET p.status = 'Cancelada' WHERE p.classe.voo.id = ?1")
+    void updatePassagemByVooCancelado(Long vooId);
+
     List<Passagem> findAllByUuidUsuario(String uuid);
 }
