@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class DatabaseInstanceInitializer {
@@ -232,7 +234,7 @@ public class DatabaseInstanceInitializer {
         passagem.setClasse(CLASSES.get(0));
         passagem.setDataHoraVoo(LocalDateTime.now());
         passagem.setNumeroIdentificacao("UDS22223012411");
-        passagem.setPortaoEmbarque("Portao");
+        passagem.setPortaoEmbarque(CLASSES.get(0).getVoo().getPortaoEmbarque());
         passagem.setValor(geraValorClasseAssento());
 
         return passagem;
@@ -321,13 +323,26 @@ public class DatabaseInstanceInitializer {
         voo.setAeroportoDestino(aeroportoDestino);
 
         voo.setDataHoraChegada(LocalDateTime.now());
-        voo.setDataHoraMarcado(LocalDateTime.now().plusHours(24));
-        voo.setDataHoraPartida(LocalDateTime.now());
-        voo.setDataHoraPrevisao(LocalDateTime.now());
+        voo.setDataHoraMarcado(LocalDateTime.now().plusHours(12));
+        voo.setDataHoraPartida(LocalDateTime.now().plusHours(13));
+        voo.setDataHoraPrevisao(LocalDateTime.now().plusHours(24));
         voo.setNome("Voo " + id);
         voo.setStatus("Programado");
+        voo.setPortaoEmbarque(geraPortaoEmbarque());
 
         return voo;
+    }
+
+    public String geraPortaoEmbarque() {
+        String letras = IntStream.range(0, 2)
+                .mapToObj(i -> String.valueOf((char) (RANDOM.nextInt(26) + 'A')))
+                .collect(Collectors.joining());
+
+        String numeros = IntStream.range(0, 4)
+                .mapToObj(i -> String.valueOf(RANDOM.nextInt(10)))
+                .collect(Collectors.joining());
+
+        return letras.concat(numeros);
     }
 
     public Long geraValorClasseAssento() {

@@ -11,6 +11,8 @@ public class VooDTO {
 
     private Long id;
     private String nome;
+    private String status;
+    private String portaoEmbarque;
     private LocalDateTime dataHoraMarcado;
     private LocalDateTime dataHoraPartida;
     private LocalDateTime dataHoraPrevisao;
