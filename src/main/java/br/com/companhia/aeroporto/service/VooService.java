@@ -2,8 +2,11 @@ package br.com.companhia.aeroporto.service;
 
 import br.com.companhia.aeroporto.domain.Voo;
 import br.com.companhia.aeroporto.dto.VooDTO;
+import br.com.companhia.aeroporto.exception.DataIntegrityViolationException;
 import br.com.companhia.aeroporto.exception.ObjectNotFoundException;
 import br.com.companhia.aeroporto.model.ModelMapping;
+import br.com.companhia.aeroporto.repository.ClasseRepository;
+import br.com.companhia.aeroporto.repository.PassagemRepository;
 import br.com.companhia.aeroporto.repository.VooRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,12 @@ public class VooService {
 
     @Autowired
     private VooRepository vooRepository;
+
+    @Autowired
+    private ClasseRepository classeRepository;
+
+    @Autowired
+    private PassagemRepository passagemRepository;
 
     @Autowired
     private ModelMapping<Voo, VooDTO> modelMapping;
@@ -44,5 +53,16 @@ public class VooService {
         return Optional.of(vooRepository.findById(id)).filter(Optional::isPresent)
                 .map(m -> modelMapping.convertToDto(m.get(), VooDTO.class))
                 .orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+    }
+
+    public String cancelarVoo(Long id) {
+        try {
+            passagemRepository.updatePassagemByVooCancelado(id);
+            classeRepository.updateAssentosByVooCancelado(id);
+            vooRepository.updateAssentosByVooCancelado(id);
+            return "Voo cancelado com sucesso!";
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException(e.getMessage());
+        }
     }
 }

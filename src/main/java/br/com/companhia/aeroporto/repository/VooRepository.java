@@ -2,8 +2,10 @@ package br.com.companhia.aeroporto.repository;
 
 import br.com.companhia.aeroporto.domain.Voo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,5 +46,10 @@ public interface VooRepository extends JpaRepository<Voo, Long> {
                    " AND v.data_hora_marcado > (NOW() + INTERVAL 5 HOUR) " +
                    "  AND c.passageiro_id IS NULL", nativeQuery = true)
     List<Voo> findAllByUfId(Long id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE Voo v SET v.status = 'Cancelada' WHERE v.id = ?1")
+    void updateAssentosByVooCancelado(Long vooId);
 
 }
