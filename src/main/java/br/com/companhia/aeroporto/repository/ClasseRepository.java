@@ -13,6 +13,9 @@ import java.util.List;
 @Repository
 public interface ClasseRepository extends JpaRepository<Classe, Long> {
 
+    @Query(value = "SELECT COUNT(*) FROM `classe` WHERE voo_id = ?1 AND passageiro_id IS NOT NULL;", nativeQuery = true)
+    Integer pegaQuantPassageirosByVoo(Long idVoo);
+
     @Modifying
     @Transactional
     @Query(value = "UPDATE Classe c SET c.passageiro = ?1 WHERE c.id = ?2 AND c.voo.id = ?3")

@@ -16,6 +16,11 @@ public class VooResource {
     @Autowired
     private VooService vooService;
 
+    @GetMapping(value = "/voo")
+    public ResponseEntity<List<VooDTO>> findAll() {
+        return Optional.ofNullable(vooService.findAll()).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
+    }
+
     @GetMapping(value = "/voo/{id}")
     public ResponseEntity<VooDTO> findById(@PathVariable Long id) {
         return Optional.ofNullable(vooService.findById(id)).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());

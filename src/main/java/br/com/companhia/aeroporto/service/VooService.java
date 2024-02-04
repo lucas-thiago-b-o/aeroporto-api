@@ -4,7 +4,6 @@ import br.com.companhia.aeroporto.domain.Voo;
 import br.com.companhia.aeroporto.dto.VooDTO;
 import br.com.companhia.aeroporto.exception.ObjectNotFoundException;
 import br.com.companhia.aeroporto.model.ModelMapping;
-import br.com.companhia.aeroporto.repository.ClasseRepository;
 import br.com.companhia.aeroporto.repository.VooRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +18,11 @@ public class VooService {
     private VooRepository vooRepository;
 
     @Autowired
-    private ClasseRepository classeRepository;
-
-    @Autowired
     private ModelMapping<Voo, VooDTO> modelMapping;
+
+    public List<VooDTO> findAll() {
+        return modelMapping.convertToDtoList(vooRepository.findAll(), VooDTO.class);
+    }
 
     public List<VooDTO> findAllByCidadeId(Long id) {
         return modelMapping.convertToDtoList(vooRepository.findAllByCidadeId(id), VooDTO.class);

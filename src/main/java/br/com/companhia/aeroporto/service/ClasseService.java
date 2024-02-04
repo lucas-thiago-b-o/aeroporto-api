@@ -40,6 +40,10 @@ public class ClasseService {
         return classeModelMapping.convertToDtoList(classeRepository.findAll(), ClasseDTO.class);
     }
 
+    public Integer getQuantPassageirosByVoo(Long idVoo) {
+        return classeRepository.pegaQuantPassageirosByVoo(idVoo);
+    }
+
     public List<ClasseDTO> getAllClassesByVooId(Long id) {
         List<Classe> classesEntity = classeRepository.findAllByVooId(id);
         List<ClasseDTO> classesDTO = classeModelMapping.convertToDtoList(classesEntity, ClasseDTO.class);

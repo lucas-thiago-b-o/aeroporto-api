@@ -139,7 +139,7 @@ public class PassagemService {
         passagem.setValor(passagemDTO.getValor());
         passagem.setDataHoraVoo(LocalDateTime.now());
         passagem.setUuidUsuario(passagemDTO.getUuidUsuario());
-        passagem.setPortaoEmbarque(geraPortaoEmbarque());
+        passagem.setPortaoEmbarque(passagem.getClasse().getVoo().getPortaoEmbarque());
         passagem.setNumeroIdentificacao(codigoUnicoPassagem);
 
         return passagem;
@@ -147,18 +147,6 @@ public class PassagemService {
 
     private String getCodigoAeroportuario(PassagemDTO passagemDTO) {
         return passagemDTO.getClasse().getVoo().getAeroportoDestino().getCodigoAeroportuario();
-    }
-
-    public String geraPortaoEmbarque() {
-        String letras = IntStream.range(0, 2)
-                .mapToObj(i -> String.valueOf((char) (RANDOM.nextInt(26) + 'A')))
-                .collect(Collectors.joining());
-
-        String numeros = IntStream.range(0, 4)
-                .mapToObj(i -> String.valueOf(RANDOM.nextInt(10)))
-                .collect(Collectors.joining());
-
-        return letras.concat(numeros);
     }
 
     private String geraCodigoUnicoPassagem(String ae) {

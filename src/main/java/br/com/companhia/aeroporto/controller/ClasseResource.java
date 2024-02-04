@@ -19,6 +19,11 @@ public class ClasseResource {
     @Autowired
     private ClasseService classeService;
 
+    @GetMapping(value = "/passageiros/{idVoo}")
+    public ResponseEntity<Integer> getQuantPassageirosByVoo(@PathVariable Long idVoo) {
+        return Optional.ofNullable(classeService.getQuantPassageirosByVoo(idVoo)).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
+    }
+
     @GetMapping(value = "/classe")
     public ResponseEntity<List<ClasseDTO>> findAll() {
         return Optional.ofNullable(classeService.findAll()).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
