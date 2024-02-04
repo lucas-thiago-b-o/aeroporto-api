@@ -1,5 +1,6 @@
 package br.com.companhia.aeroporto.controller;
 
+import br.com.companhia.aeroporto.dto.PassagemDTO;
 import br.com.companhia.aeroporto.dto.VooDTO;
 import br.com.companhia.aeroporto.service.VooService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,10 @@ public class VooResource {
     @GetMapping(value = "/voo/aeroporto/estado/{idEstado}")
     public ResponseEntity<List<VooDTO>> findAllByEstadoId(@PathVariable Long idEstado) {
         return Optional.ofNullable(vooService.findAllByUfId(idEstado)).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
+    }
+
+    @PutMapping(value = "/voo/cancelar/{idVoo}")
+    public ResponseEntity<String> cancelarPassagem(@PathVariable Long idVoo) {
+        return Optional.ofNullable(vooService.cancelarVoo(idVoo)).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
     }
 }
