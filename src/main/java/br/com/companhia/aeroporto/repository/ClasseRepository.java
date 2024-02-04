@@ -21,5 +21,10 @@ public interface ClasseRepository extends JpaRepository<Classe, Long> {
     @Query(value = "UPDATE Classe c SET c.passageiro = ?1 WHERE c.id = ?2 AND c.voo.id = ?3")
     void updateAssentoVooDaPassagemComprada(Passageiro passageiro, Long classeId, Long vooId);
 
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE Classe c SET c.passageiro = NULL WHERE c.voo.id = ?1")
+    void updateAssentosByVooCancelado(Long vooId);
+
     List<Classe> findAllByVooId(Long id);
 }
