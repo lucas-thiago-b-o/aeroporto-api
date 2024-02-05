@@ -2,7 +2,6 @@ package br.com.companhia.aeroporto.service;
 
 import br.com.companhia.aeroporto.domain.Voo;
 import br.com.companhia.aeroporto.dto.VooDTO;
-import br.com.companhia.aeroporto.exception.DataIntegrityViolationException;
 import br.com.companhia.aeroporto.model.ModelMapping;
 import br.com.companhia.aeroporto.repository.ClasseRepository;
 import br.com.companhia.aeroporto.repository.PassagemRepository;

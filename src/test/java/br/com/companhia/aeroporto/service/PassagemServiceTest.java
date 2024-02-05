@@ -2,7 +2,6 @@ package br.com.companhia.aeroporto.service;
 
 import br.com.companhia.aeroporto.domain.*;
 import br.com.companhia.aeroporto.dto.*;
-import br.com.companhia.aeroporto.exception.DataIntegrityViolationException;
 import br.com.companhia.aeroporto.model.ModelMapping;
 import br.com.companhia.aeroporto.repository.*;
 import org.junit.jupiter.api.Assertions;
