@@ -16,8 +16,12 @@ import java.util.Optional;
 @RequestMapping(value = "/api/classes")
 public class ClasseResource {
 
+    private final ClasseService classeService;
+
     @Autowired
-    private ClasseService classeService;
+    public ClasseResource(ClasseService classeService) {
+        this.classeService = classeService;
+    }
 
     @GetMapping(value = "/passageiros/{idVoo}")
     public ResponseEntity<Integer> getQuantPassageirosByVoo(@PathVariable Long idVoo) {

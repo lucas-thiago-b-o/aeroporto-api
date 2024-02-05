@@ -16,16 +16,22 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthenticationController {
+public class AuthenticationResource {
+
+    private final AuthenticationManager authenticationManager;
+
+    private final UsuarioRepository usuarioRepository;
+
+    private final TokenService tokenService;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private TokenService tokenService;
+    public AuthenticationResource(AuthenticationManager authenticationManager,
+                                  UsuarioRepository usuarioRepository,
+                                  TokenService tokenService) {
+        this.authenticationManager = authenticationManager;
+        this.usuarioRepository = usuarioRepository;
+        this.tokenService = tokenService;
+    }
 
     @GetMapping("/pingUser/{uuid}")
     public ResponseEntity pingUser(@PathVariable String uuid) {
@@ -54,6 +60,6 @@ public class AuthenticationController {
 
         this.usuarioRepository.save(newUsuario);
 
-        return ResponseEntity.ok("Cadastro efeutado com sucesso");
+        return ResponseEntity.ok("Cadastro efetuado com sucesso");
     }
 }

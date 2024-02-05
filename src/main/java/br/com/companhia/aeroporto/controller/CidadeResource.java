@@ -15,8 +15,12 @@ import java.util.Optional;
 @RequestMapping(value = "/api/cidades")
 public class CidadeResource {
 
+    private final CidadeService cidadeService;
+
     @Autowired
-    private CidadeService cidadeService;
+    public CidadeResource(CidadeService cidadeService) {
+        this.cidadeService = cidadeService;
+    }
 
     @GetMapping(value = "/cidade")
     public ResponseEntity<List<CidadeDTO>> findAll() {

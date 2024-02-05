@@ -13,8 +13,12 @@ import java.util.Optional;
 @RequestMapping(value = "/api/passagens")
 public class PassagemResource {
 
+    private final PassagemService passagemService;
+
     @Autowired
-    private PassagemService passagemService;
+    public PassagemResource(PassagemService passagemService) {
+        this.passagemService = passagemService;
+    }
 
     @GetMapping(value = "/passagem")
     public ResponseEntity<List<PassagemDTO>> findAll() {

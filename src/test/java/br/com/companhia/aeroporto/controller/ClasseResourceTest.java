@@ -1,7 +1,7 @@
 package br.com.companhia.aeroporto.controller;
 
-import br.com.companhia.aeroporto.dto.AeroportoDTO;
-import br.com.companhia.aeroporto.service.AeroportoService;
+import br.com.companhia.aeroporto.dto.ClasseDTO;
+import br.com.companhia.aeroporto.service.ClasseService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,16 +14,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-public class AeroportoResourceTest {
+public class ClasseResourceTest {
 
     @Mock
-    private AeroportoService aeroportoService;
+    private ClasseService cidadeService;
 
     private MockMvc mockMvc;
 
@@ -31,44 +31,43 @@ public class AeroportoResourceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        AeroportoResource aeroportoResource = new AeroportoResource(aeroportoService);
+        ClasseResource cidadeResource = new ClasseResource(cidadeService);
         this.mockMvc = MockMvcBuilders
-                .standaloneSetup(aeroportoResource)
+                .standaloneSetup(cidadeResource)
                 .build();
     }
 
     @Test
     public void testFindAll() throws Exception {
-        mockMvc.perform(get("/api/aeroportos/aeroporto"))
+        mockMvc.perform(get("/api/classes/classe"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     public void testFindById() throws Exception {
-        when(aeroportoService.findById(1L)).thenReturn(new AeroportoDTO());
+        when(cidadeService.findById(1L)).thenReturn(new ClasseDTO());
 
-        mockMvc.perform(get("/api/aeroportos/aeroporto/{id}", 1L))
+        mockMvc.perform(get("/api/classes/classe/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void testFindAllByCidadeId() throws Exception {
-        when(aeroportoService.findAllByCidadeId(1L)).thenReturn(List.of(new AeroportoDTO()));
+    public void testFindByVooId() throws Exception {
+        when(cidadeService.getAllClassesByVooId(1L)).thenReturn(List.of(new ClasseDTO()));
 
-        mockMvc.perform(get("/api/aeroportos/aeroporto/cidade/{id}", 1L))
+        mockMvc.perform(get("/api/classes/classe/voo/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void testFindAllByEstadoId() throws Exception {
-        when(aeroportoService.findAllByUfId(1L)).thenReturn(List.of(new AeroportoDTO()));
+    public void testGetQuantPassageirosByVoo() throws Exception {
+        when(cidadeService.getQuantPassageirosByVoo(1L)).thenReturn(1);
 
-        mockMvc.perform(get("/api/aeroportos/aeroporto/estado/{id}", 1L))
+        mockMvc.perform(get("/api/classes/passageiros/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
-
 }

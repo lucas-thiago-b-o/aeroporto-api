@@ -1,6 +1,5 @@
 package br.com.companhia.aeroporto.controller;
 
-import br.com.companhia.aeroporto.dto.PassagemDTO;
 import br.com.companhia.aeroporto.dto.VooDTO;
 import br.com.companhia.aeroporto.service.VooService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,12 @@ import java.util.Optional;
 @RequestMapping(value = "/api/voos")
 public class VooResource {
 
+    private final VooService vooService;
+
     @Autowired
-    private VooService vooService;
+    public VooResource(VooService vooService) {
+        this.vooService = vooService;
+    }
 
     @GetMapping(value = "/voo")
     public ResponseEntity<List<VooDTO>> findAll() {
